@@ -1,4 +1,4 @@
-# Task 1
+# TASK 1
 
 To solve the task of finding numbers less than a given integer ```k``` from a list of integers using quantum computing, we can leverage Grover's algorithm.
 
