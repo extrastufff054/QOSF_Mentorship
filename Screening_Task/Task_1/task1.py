@@ -1,5 +1,6 @@
-from qiskit import QuantumCircuit, transpile, assemble, execute
-from qiskit import Aer
+from qiskit import QuantumCircuit, QuantumRegister, Aer, IBMQ, transpile, assemble
+# from qiskit import execute
+# from qiskit import BasicAer
 from qiskit.algorithms import Grover
 from qiskit.circuit.library import PhaseOracle
 
