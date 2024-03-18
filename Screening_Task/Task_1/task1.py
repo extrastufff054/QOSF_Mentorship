@@ -2,6 +2,10 @@ from qiskit import QuantumCircuit
 from qiskit_algorithms import Grover
 from qiskit.circuit.library import PhaseOracle
 from qiskit.utils import QuantumInstance
+
+# If Quantum Instance library throws an error you can also use qiskit.primitive.Sampler
+# from qiskit.primitives import Sampler
+
 from qiskit_aer import AerSimulator
 
 def create_oracle(k, num_qubits):
