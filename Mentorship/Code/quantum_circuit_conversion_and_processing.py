@@ -15,11 +15,10 @@ def circuit(binary_word):
         bit_sequence = binary_word[i:i+3]
         # Convert the three-bit sequence to an integer between 0 and 7
         value = int(bit_sequence, 2)
-        
         # Use the integer value to determine which gates to apply
         if value == 0:
-            qml.PauliX(i)  # Apply X gate for '000'
-        elif value == 1:
+            qml.PauliX(i)  # Apply X gate for '000'                 # Replace this by loop
+        elif value == 1:                                            # Check the value of the bit sequence and apply the corresponding gate - 1 or 0
             qml.PauliX(i)  # Apply X gate for '001'
         elif value == 2:
             qml.PauliY(i)  # Apply Y gate for '010'
@@ -33,7 +32,7 @@ def circuit(binary_word):
             qml.T(i)  # Apply T gate for '110'
         elif value == 7:
             qml.CZ((i, (i+1)%len(binary_word)))  # Apply CZ gate for '111'
-    
+
     return [qml.probs(wires=i) for i in range(len(binary_word))]
 
 # Execute the circuit to get probabilities
