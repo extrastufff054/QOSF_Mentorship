@@ -4,19 +4,12 @@ from pennylane import numpy as np
 def encode_character(c):
     """Encode a character into a quantum state."""
     angle = ord(c) * (2 * np.pi / 256)
-    return [np.cos(angle / 2), 1j * np.sin(angle / 2)]
+    return angle
 
-def decode_character(state):
-    """Decode a quantum state into a character."""
-    angle = 2 * np.arctan2(np.abs(state[1]), np.abs(state[0]))
-
-    # Ensure the angle is within the valid range for a character
-    angle = (angle + 2 * np.pi) % (2 * np.pi)
+def decode_character(angle):
+    """Decode a quantum state angle into a character."""
     char_code = int(np.round(angle * (256 / (2 * np.pi))))
-    if 0 <= char_code < 256:
-        return chr(char_code)
-    else:
-        return '?'  # Return a placeholder character if the angle is out of range
+    return chr(char_code) if 0 <= char_code < 256 else '?'  # Handle out-of-range gracefully
 
 def create_embedding_circuit(word):
     """Create a quantum circuit that encodes a word."""
@@ -25,13 +18,10 @@ def create_embedding_circuit(word):
 
     @qml.qnode(dev)
     def circuit():
-        # Encode each character into a qubit
         for i, char in enumerate(word):
-            state = encode_character(char)
-            qml.QubitStateVector(state, wires=i)
-
-        # Measure the expectation values of the qubits
-        return [qml.state() for i in range(n_qubits)]
+            angle = encode_character(char)
+            qml.RY(angle, wires=i)
+        return [qml.state() for _ in range(n_qubits)]
 
     return circuit
 
@@ -39,7 +29,11 @@ def embed_word(word):
     """Encode a word into a quantum circuit and then decode it."""
     embedding_circuit = create_embedding_circuit(word)
     measured_states = embedding_circuit()
-    decoded_word = ''.join(decode_character(state) for state in measured_states)
+    
+    # Decode the character states
+    decoded_word = ''.join(decode_character(np.angle(state[1]) if np.abs(state[1]) > 0 else np.angle(state[0])) 
+                                             for state in measured_states)
+    
     return decoded_word
 
 # Example usage
