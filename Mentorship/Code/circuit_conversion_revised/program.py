@@ -1,15 +1,12 @@
 import pennylane as qml
 from pennylane import numpy as np
 
-# Function to convert a character to its ASCII value and then to a quantum angle
 def char_to_angle(c):
-    return ord(c) * (2 * np.pi / 128)
+    return ord(c) * (2 * np.pi / 256)  # Use a larger range for the angles
 
-# Function to convert a quantum angle back to a character
 def angle_to_char(angle):
-    return chr(int(np.round(angle * (128 / (2 * np.pi))) % 128))
+    return chr(int(np.round(angle * (256 / (2 * np.pi)))))  # Use a larger range for the characters
 
-# Function to create a quantum circuit that encodes a word
 def create_embedding_circuit(word):
     n_qubits = len(word)
     dev = qml.device("default.qubit", wires=n_qubits)
@@ -21,6 +18,7 @@ def create_embedding_circuit(word):
             for i, char in enumerate(word):
                 angle = char_to_angle(char)
                 qml.RY(angle, wires=i)
+                qml.RX(np.pi / 2, wires=i)  # Apply an additional RX gate
             
             # Measure the chosen Pauli operator
             return [qml.expval(measurement(wires=i)) for i in range(n_qubits)]
@@ -29,7 +27,6 @@ def create_embedding_circuit(word):
 
     return quantum_embedding_circuit
 
-# Function to encode a word into a quantum circuit and then decode it
 def embed_word(word):
     n_qubits = len(word)
     embedding_circuit = create_embedding_circuit(word)
