@@ -8,12 +8,15 @@ def encode_character(c):
 
 def decode_character(state):
     """Decode a quantum state into a character."""
-    if np.ndim(state) == 0:
-        # Handle scalar values
-        angle = 2 * np.arctan2(np.imag(np.exp(1j * state)), np.real(np.exp(1j * state)))
+    angle = 2 * np.arctan2(np.abs(state[1]), np.abs(state[0]))
+
+    # Ensure the angle is within the valid range for a character
+    angle = (angle + 2 * np.pi) % (2 * np.pi)
+    char_code = int(np.round(angle * (256 / (2 * np.pi))))
+    if 0 <= char_code < 256:
+        return chr(char_code)
     else:
-        angle = 2 * np.arctan2(np.imag(state[1]), np.real(state[0]))
-    return chr(int(np.round(angle * (256 / (2 * np.pi)))))
+        return '?'  # Return a placeholder character if the angle is out of range
 
 def create_embedding_circuit(word):
     """Create a quantum circuit that encodes a word."""
@@ -28,7 +31,7 @@ def create_embedding_circuit(word):
             qml.QubitStateVector(state, wires=i)
 
         # Measure the expectation values of the qubits
-        return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
+        return [qml.state() for i in range(n_qubits)]
 
     return circuit
 
