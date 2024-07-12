@@ -9,7 +9,7 @@ def char_to_angle(c):
 def angle_to_char(angle):
     return chr(int(np.round(angle * (128 / (2 * np.pi))) % 128))
 
-# Function to encode a word into a quantum circuit
+# Function to encode a word into a quantum circuit and then decode it
 def embed_word(word):
     n_qubits = len(word)
     dev = qml.device("default.qubit", wires=n_qubits)
@@ -21,14 +21,17 @@ def embed_word(word):
             angle = char_to_angle(char)
             qml.RY(angle, wires=i)
         
-        return qml.state()
+        # Measure the expectation values of PauliX and PauliY to infer the angle
+        return [qml.expval(qml.PauliX(i)) for i in range(n_qubits)], [qml.expval(qml.PauliY(i)) for i in range(n_qubits)]
 
-    # Execute the quantum circuit and measure the state
-    state = quantum_embedding()
+    # Execute the quantum circuit and measure
+    x_results, y_results = quantum_embedding()
     
-    # Decode the measured values back to characters
-    angles = np.angle(state[np.where(state != 0)])
-    decoded_word = ''.join([angle_to_char(angle) for angle in angles[:n_qubits]])
+    # Compute angles from the expectation values
+    angles = np.arctan2(y_results, x_results)
+    
+    # Convert angles back to characters
+    decoded_word = ''.join([angle_to_char(angle) for angle in angles])
 
     return decoded_word
 
