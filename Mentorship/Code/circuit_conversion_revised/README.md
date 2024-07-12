@@ -1,4 +1,4 @@
-### Introduction to Quantum Character Encoding and Decoding
+### Quantum Character Encoding and Decoding
 
 This code uses quantum computing concepts to encode a word into quantum states and then decode it back to the original word. Quantum computing deals with qubits (quantum bits) instead of classical bits. Each qubit can be in a state of 0, 1, or any quantum superposition of these states. Here, we use a Python library called `PennyLane` to create and manage our quantum circuits.
 
