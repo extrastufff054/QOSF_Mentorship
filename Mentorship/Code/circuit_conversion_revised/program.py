@@ -9,7 +9,7 @@ def encode_character(c):
 def decode_character(angle):
     """Decode a quantum state angle into a character."""
     char_code = int(np.round(angle * (256 / (2 * np.pi))))
-    return chr(char_code) if 0 <= char_code < 256 else '?'  # Handle out-of-range gracefully
+    return chr(char_code) if 0 <= char_code < 256 else '?'  # Handle out-of-range
 
 def create_embedding_circuit(word):
     """Create a quantum circuit that encodes a word."""
@@ -30,9 +30,10 @@ def embed_word(word):
     embedding_circuit = create_embedding_circuit(word)
     measured_states = embedding_circuit()
     
-    # Decode the character states
-    decoded_word = ''.join(decode_character(np.angle(state[1]) if np.abs(state[1]) > 0 else np.angle(state[0])) 
-                                             for state in measured_states)
+    decoded_word = ''.join(
+        decode_character(np.angle(measured_states[i][1]) if np.abs(measured_states[i][1]) > 0 else np.angle(measured_states[i][0]))
+        for i in range(len(measured_states))
+    )
     
     return decoded_word
 
