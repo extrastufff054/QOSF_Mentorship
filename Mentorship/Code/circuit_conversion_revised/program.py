@@ -9,23 +9,34 @@ def char_to_angle(c):
 def angle_to_char(angle):
     return chr(int(np.round(angle * (128 / (2 * np.pi))) % 128))
 
-# Function to encode a word into a quantum circuit and then decode it
-def embed_word(word):
+# Function to create a quantum circuit that encodes a word
+def create_embedding_circuit(word):
     n_qubits = len(word)
     dev = qml.device("default.qubit", wires=n_qubits)
 
-    @qml.qnode(dev)
-    def quantum_embedding():
-        # Encode each character into a qubit
-        for i, char in enumerate(word):
-            angle = char_to_angle(char)
-            qml.RY(angle, wires=i)
+    def quantum_embedding_circuit(measurement):
+        @qml.qnode(dev)
+        def circuit():
+            # Encode each character into a qubit
+            for i, char in enumerate(word):
+                angle = char_to_angle(char)
+                qml.RY(angle, wires=i)
+            
+            # Measure the chosen Pauli operator
+            return [qml.expval(measurement(wires=i)) for i in range(n_qubits)]
         
-        # Measure the expectation values of PauliX and PauliY to infer the angle
-        return [qml.expval(qml.PauliX(i)) for i in range(n_qubits)], [qml.expval(qml.PauliY(i)) for i in range(n_qubits)]
+        return circuit
 
-    # Execute the quantum circuit and measure
-    x_results, y_results = quantum_embedding()
+    return quantum_embedding_circuit
+
+# Function to encode a word into a quantum circuit and then decode it
+def embed_word(word):
+    n_qubits = len(word)
+    embedding_circuit = create_embedding_circuit(word)
+
+    # Measure the expectation values of PauliX and PauliY
+    x_results = embedding_circuit(qml.PauliX)()
+    y_results = embedding_circuit(qml.PauliY)()
     
     # Compute angles from the expectation values
     angles = np.arctan2(y_results, x_results)
