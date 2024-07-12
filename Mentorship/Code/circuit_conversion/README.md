@@ -11,7 +11,16 @@ To run this program, you should have the following pre-requisites:
    - Install the PennyLane library, which is a cross-platform Python library for differentiable programming of quantum computers. You can install it using pip:
      ```bash
      pip install pennylane
-     ```
+     ```Encoded word: cab -> 010000001
+Retrieved word: 
+Encoded word: a -> 000
+Retrieved word: 
+Encoded word: b -> 001
+Retrieved word: 
+Encoded word: c -> 010
+Retrieved word: 
+Encoded word: d -> 011
+Retrieved word: 
 
 2. **Python**:
    - Ensure you have Python installed on your system. PennyLane supports Python 3.7 and above.
