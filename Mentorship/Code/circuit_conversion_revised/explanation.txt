@@ -1,0 +1,13 @@
+The approach currently discussed uses a single quantum circuit for the entire word, 
+with each character being encoded into a separate qubit within that circuit. 
+Here’s a brief explanation:
+
+Single Circuit for the Word: The quantum circuit is created with a number of qubits equal to the length of the word.
+Each qubit in the circuit represents one character from the word.
+Encoding: Each character is encoded as an angle and then used to apply a rotation gate (RY) to the corresponding qubit.
+Decoding: The quantum states are measured, and the angles are used to decode back into characters to retrieve the original word.
+The intent is to encode the entire word in one go and retrieve it later using the same circuit setup.
+
+Clarification:
+Circuit per Character: Each character has its own qubit within the same circuit.
+Circuit per Word: One quantum circuit is used for the entire word, with multiple qubits corresponding to each character.
