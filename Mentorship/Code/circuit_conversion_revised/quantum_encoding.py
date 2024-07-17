@@ -4,7 +4,7 @@ from pennylane import numpy as np
 def encode_character(c):
     """
     Encode a character into a quantum state representation.
-    
+
     This function takes a single character and converts it to a corresponding
     angle that will be used for rotation in the quantum circuit.
 
@@ -21,7 +21,7 @@ def encode_character(c):
 def decode_character(angle):
     """
     Decode an angle back into a character from its quantum state representation.
-    
+
     This function converts the angle obtained from the quantum measurement back
     into a character.
 
@@ -38,7 +38,7 @@ def decode_character(angle):
 def create_embedding_circuit(word):
     """
     Create a quantum circuit that encodes a word into qubit states.
-    
+
     This function sets up a quantum circuit with one qubit for each character in the input word.
     Each character is encoded by applying an RY rotation to its corresponding qubit.
 
@@ -66,10 +66,11 @@ def create_embedding_circuit(word):
 
     return circuit  # Return the defined quantum circuit
 
+
 def embed_word(word):
     """
-    Encode a word into a quantum circuit and decode it back to retrieve the original word.
-    
+    Encode a word into a quantum circuit and then decode it back to retrieve the original word.
+
     This function integrates the entire workflow: encoding the word into qubit states using
     a quantum circuit, measuring the qubits, and then decoding the resulting states back
     into characters.
@@ -90,8 +91,8 @@ def embed_word(word):
     
     return decoded_word  # Return the reconstructed word
 
-# Example usage
-word = "Cat"  # Input word to encode
+
+word = "Bat"  # Input word to encode
 retrieved_word = embed_word(word)  # Encode and decode the word
 print(f"Original word: {word}")  # Display the original word
 print(f"Retrieved word: {retrieved_word}")  # Display the reconstructed word

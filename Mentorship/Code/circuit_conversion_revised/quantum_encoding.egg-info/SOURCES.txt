@@ -1,0 +1,6 @@
+README.md
+setup.py
+quantum_encoding.egg-info/PKG-INFO
+quantum_encoding.egg-info/SOURCES.txt
+quantum_encoding.egg-info/dependency_links.txt
+quantum_encoding.egg-info/top_level.txt
